@@ -17,6 +17,11 @@ import okio.SYSTEM
 import okio.use
 
 
+// TODO: This whole system was mistakenly adapted from example code: https://github.com/android/kotlin-multiplatform-samples/tree/main/Fruitties
+// I thought this was part of the Room usage but it's for local preferences. I do not need this implementation for now, but leaving as reference
+// because it might come in handy later if I do need to deal with that, especially in a multi platform way. Will delete and update to clean up code.
+// Need to clean up references in "actual" declarations and from repository code.
+
 @Serializable
 data class IncidentGroup(
     val items: List<GroupItem>
