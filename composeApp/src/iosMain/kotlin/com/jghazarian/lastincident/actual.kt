@@ -1,7 +1,6 @@
 package com.jghazarian.lastincident
 
 import androidx.room.Room
-import com.jghazarian.lastincident.database.IncidentDataStore
 import kotlinx.cinterop.ExperimentalForeignApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
@@ -13,7 +12,6 @@ import platform.Foundation.NSUserDomainMask
 import androidx.sqlite.driver.bundled.BundledSQLiteDriver
 
 actual fun platformModule() = module {
-    single { createIncidentDataStore() }
     single { createRoomDatabase() }
 }
 
@@ -25,12 +23,6 @@ fun createRoomDatabase(): AppDatabase {
         .setDriver(BundledSQLiteDriver())
         .setQueryCoroutineContext(Dispatchers.IO)
         .build()
-}
-
-fun createIncidentDataStore(): IncidentDataStore {
-    return IncidentDataStore {
-        "${fileDirectory()}/incident.json"
-    }
 }
 
 @OptIn(ExperimentalForeignApi::class)
