@@ -9,7 +9,6 @@ import com.jghazarian.lastincident.di.initKoin
 import com.jghazarian.lastincident.navigation.IncidentNavHost
 
 fun main() = application {
-//    val koin = initKoin().koin
     val koin = initKoin {
         modules(appModule)
     }
@@ -19,13 +18,6 @@ fun main() = application {
         state = windowState,
         title = "LastIncident",
     ) {
-//        App()
-//        IncidentApp()
         IncidentNavHost(navController = rememberNavController())
-//        CommonScreen(
-//            navigateToIncidentEntry = {},
-//            modifier = Modifier,
-//            timerViewModel = TimerViewModel()
-//        )
     }
 }
