@@ -7,7 +7,6 @@ import kotlinx.coroutines.Dispatchers
 import org.koin.dsl.module
 
 actual fun platformModule() = module {
-//    single { Android.create() }   //This was for a ktor client in fantasy
     single<AppDatabase> { createRoomDatabase(get()) }
 }
 

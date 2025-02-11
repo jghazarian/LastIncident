@@ -12,7 +12,7 @@ import platform.Foundation.NSUserDomainMask
 import androidx.sqlite.driver.bundled.BundledSQLiteDriver
 
 actual fun platformModule() = module {
-    single { createRoomDatabase() }
+    single<AppDatabase> { createRoomDatabase() }
 }
 
 fun createRoomDatabase(): AppDatabase {
