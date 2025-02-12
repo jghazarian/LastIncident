@@ -7,6 +7,7 @@ import androidx.compose.ui.window.rememberWindowState
 import androidx.navigation.compose.rememberNavController
 import com.jghazarian.lastincident.di.initKoin
 import com.jghazarian.lastincident.navigation.IncidentNavHost
+import com.jghazarian.lastincident.theme.IncidentTheme
 
 fun main() = application {
     val koin = initKoin {
@@ -18,6 +19,8 @@ fun main() = application {
         state = windowState,
         title = "LastIncident",
     ) {
-        IncidentNavHost(navController = rememberNavController())
+        IncidentTheme {
+            IncidentNavHost(navController = rememberNavController())
+        }
     }
 }
