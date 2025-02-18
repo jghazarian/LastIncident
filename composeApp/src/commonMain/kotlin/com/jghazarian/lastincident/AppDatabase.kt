@@ -58,6 +58,9 @@ interface IncidentDao {
 
     @Query("SELECT DISTINCT title From IncidentEntity")
     suspend fun getUniqueTitles(): List<String>
+
+    @Query("SELECT * FROM IncidentEntity WHERE title = :title")
+    fun getIncidentsWithTitle(title: String): Flow<List<IncidentEntity>>
 }
 
 @Entity

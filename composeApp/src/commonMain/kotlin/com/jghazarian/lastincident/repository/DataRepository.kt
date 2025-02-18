@@ -13,12 +13,6 @@ class DataRepository : Repository, KoinComponent {
     private val database: AppDatabase by inject()
     private val scope: CoroutineScope = CoroutineScope(Dispatchers.Default)
 
-//    init {
-//        scope.launch {
-////            refreshData()
-//        }
-//    }
-
     override suspend fun addIncident(incidentEntity: IncidentEntity) {
 //        //TODO: this is doing the fruitties add to cart, which does not work for what we want to do here
         database.getDao().insert(incidentEntity)
@@ -43,6 +37,10 @@ class DataRepository : Repository, KoinComponent {
 
     override fun loadData(): Flow<List<IncidentEntity>> {
         return database.getDao().getAllAsFlow()
+    }
+
+    override fun getIncidentsWithTitle(title: String): Flow<List<IncidentEntity>> {
+        return database.getDao().getIncidentsWithTitle(title)
     }
 
     override fun getIncident(id: Long): Flow<IncidentEntity>{

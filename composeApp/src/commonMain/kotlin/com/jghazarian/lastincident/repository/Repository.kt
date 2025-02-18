@@ -9,6 +9,7 @@ interface Repository {
     fun getDistinctTitles(): Flow<List<String>>
     suspend fun getDistinctTitlesNoFlow(): List<String>
     fun loadData(): Flow<List<IncidentEntity>>
+    fun getIncidentsWithTitle(title: String): Flow<List<IncidentEntity>>
     fun getIncident(id: Long): Flow<IncidentEntity>
     suspend fun refreshData()
 }

@@ -16,13 +16,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import com.jghazarian.lastincident.util.convertMillisToDate
+import com.jghazarian.lastincident.theme.Typography
 
 
 @Composable
 fun IncidentItem(
     item: IncidentEntity,
     onIncidentClick: (id: Long) -> Unit,
-    onAddIncident: (incidentEntity: IncidentEntity) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Card(
@@ -44,47 +45,31 @@ fun IncidentItem(
                     .heightIn(min = 96.dp),
                 verticalArrangement = Arrangement.Center,
             ) {
-                Text(
-                    text = "test: ${item.title}",
-                    overflow = TextOverflow.Ellipsis,
-                    modifier = Modifier
-                        .padding(horizontal = 16.dp)
-                        .padding(top = 8.dp)
-                )
-                //TODO: more details
+                DetailRow("Title", item.title, modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp))
+                DetailRow("Date", convertMillisToDate(item.timeStamp), modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp))
             }
         }
     }
 }
 
 @Composable
-fun TitleItem(
-    item: String,
-    modifier: Modifier = Modifier,
+fun DetailRow(
+    title: String,
+    detail: String,
+    modifier: Modifier = Modifier
 ) {
-    Card(
-        modifier = modifier
-            .padding(horizontal = 16.dp, vertical = 8.dp)
-            .clip(RoundedCornerShape(8.dp)),
-        shape = RoundedCornerShape(8.dp)
-    ) {
-        Row(
-//            modifier = Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-            Column(
-                modifier = Modifier
-                    .heightIn(min = 96.dp),
-                verticalArrangement = Arrangement.Center
-            ) {
-                Text(
-                    text = "Unique Title: $item",
-                    overflow = TextOverflow.Ellipsis,
-                    modifier = Modifier
-                        .padding(horizontal = 16.dp)
-                        .padding(top = 8.dp)
-                )
-            }
-        }
+    Row(modifier = modifier)
+    {
+        Text(
+            text = title,
+            style = Typography.labelMedium,
+        )
+        Text(
+            text = detail,
+            style = Typography.bodyMedium,
+            overflow = TextOverflow.Ellipsis,
+            modifier = Modifier.padding(start = 8.dp)
+
+        )
     }
 }
