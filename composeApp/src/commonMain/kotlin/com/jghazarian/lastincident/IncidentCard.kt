@@ -8,36 +8,40 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Card
 import androidx.compose.material.Text
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedCard
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import com.jghazarian.lastincident.database.IncidentEntity
 import com.jghazarian.lastincident.util.convertMillisToDate
 import com.jghazarian.lastincident.theme.Typography
 
 
 @Composable
-fun IncidentItem(
+fun IncidentCard(
     item: IncidentEntity,
+    showDetails: Boolean = false,
     onIncidentClick: (id: Long) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    Card(
+    OutlinedCard(
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.surface,
+        ),
         modifier = modifier
             .fillMaxWidth()
             .clickable { onIncidentClick(item.id) }
             .padding(horizontal = 16.dp, vertical = 8.dp)
             .clip(RoundedCornerShape(8.dp)),
         shape = RoundedCornerShape(8.dp),
-        //TODO: colors =
-        //TODO: elevation = CardDe
     ) {
         Row(
-//            modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Column(
@@ -46,6 +50,9 @@ fun IncidentItem(
                 verticalArrangement = Arrangement.Center,
             ) {
                 DetailRow("Title", item.title, modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp))
+                if (showDetails) {
+                    DetailRow("Details", item.content, modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp))
+                }
                 DetailRow("Date", convertMillisToDate(item.timeStamp), modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp))
             }
         }

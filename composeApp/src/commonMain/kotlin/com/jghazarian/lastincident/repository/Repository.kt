@@ -1,6 +1,6 @@
 package com.jghazarian.lastincident.repository
 
-import com.jghazarian.lastincident.IncidentEntity
+import com.jghazarian.lastincident.database.IncidentEntity
 import kotlinx.coroutines.flow.Flow
 
 interface Repository {

@@ -16,7 +16,6 @@ import androidx.compose.material3.Switch
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -24,8 +23,9 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.jghazarian.lastincident.IncidentEntity
-import com.jghazarian.lastincident.IncidentItem
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.jghazarian.lastincident.IncidentCard
+import com.jghazarian.lastincident.database.IncidentEntity
 import com.jghazarian.lastincident.navigation.IncidentTopAppBar
 import com.jghazarian.lastincident.theme.IncidentTheme
 import com.jghazarian.lastincident.theme.Typography
@@ -52,10 +52,10 @@ fun MainScreen(
     val expanded = 34
     val topAppBarTextSize = (collapsed + (expanded - collapsed)*(1-scrollBehavior.state.collapsedFraction)).sp
     val viewModel = koinViewModel<MainViewModel>()
-    val uiState by viewModel.homeUiState.collectAsState()
+    val uiState by viewModel.homeUiState.collectAsStateWithLifecycle()
 
-    val currentTime = timerViewModel.timer.collectAsState()
-    val periodSinceLast = viewModel.periodSinceLast.collectAsState()
+    val currentTime = timerViewModel.timer.collectAsStateWithLifecycle()
+    val periodSinceLast = viewModel.periodSinceLast.collectAsStateWithLifecycle()
     Scaffold(
         modifier = modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
@@ -133,7 +133,7 @@ fun MainScreen(
                     items(
                         items = uiState.incidents.sortedBy { it.timeStamp }.reversed(),
                         key = { it.id }) { item ->
-                        IncidentItem(
+                        IncidentCard(
                             item = item,
                             onIncidentClick = { navigateToIncidentDetail(it) }
                         )

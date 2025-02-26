@@ -3,7 +3,7 @@ package com.jghazarian.lastincident.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.jghazarian.lastincident.IncidentDetails
-import com.jghazarian.lastincident.IncidentEntity
+import com.jghazarian.lastincident.database.IncidentEntity
 import com.jghazarian.lastincident.repository.Repository
 import com.jghazarian.lastincident.toIncidentDetails
 import kotlinx.coroutines.ExperimentalCoroutinesApi

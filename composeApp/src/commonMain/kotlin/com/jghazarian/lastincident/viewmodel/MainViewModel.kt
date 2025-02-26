@@ -2,7 +2,7 @@ package com.jghazarian.lastincident.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.jghazarian.lastincident.IncidentEntity
+import com.jghazarian.lastincident.database.IncidentEntity
 import com.jghazarian.lastincident.repository.Repository
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -76,36 +76,6 @@ class MainViewModel : ViewModel(), KoinComponent {
             }
         }
     }
-
-    //TODO: see if this gets in the way of koin injection
-//    companion object {
-//
-//        val APP_CONTAINER_KEY = CreationExtras.Key<AppContainer>()
-//
-//        val Factory: ViewModelProvider.Factory = viewModelFactory {
-//            initializer {
-//                val appContainer = this[APP_CONTAINER_KEY] as AppContainer
-//                val repository = appContainer.dataRepository
-//                MainViewModel(repository = repository)
-//            }
-//        }
-//
-//        /**
-//         * Helper function to prepare CreationExtras.
-//         *
-//         * USAGE:
-//         *
-//         * val mainViewModel: MainViewModel = ViewModelProvider.create(
-//         *  owner = this as ViewModelStoreOwner,
-//         *  factory = MainViewModel.Factory,
-//         *  extras = MainViewModel.newCreationExtras(appContainer),
-//         * )[MainViewModel::class]
-//         */
-//        fun newCreationExtras(appContainer: AppContainer): CreationExtras =
-//            MutableCreationExtras().apply {
-//                set(APP_CONTAINER_KEY, appContainer)
-//            }
-//    }
 }
 
 data class HomeUiState(

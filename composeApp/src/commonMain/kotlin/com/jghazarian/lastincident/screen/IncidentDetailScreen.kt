@@ -15,6 +15,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
@@ -23,7 +24,8 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.jghazarian.lastincident.IncidentItem
+import com.jghazarian.lastincident.IncidentCard
+import com.jghazarian.lastincident.theme.Typography
 import com.jghazarian.lastincident.util.convertMillisToDate
 import com.jghazarian.lastincident.viewmodel.DetailUiState
 import com.jghazarian.lastincident.viewmodel.IncidentDetailViewModel
@@ -77,12 +79,16 @@ fun IncidentDetailBody(
         Text("Details: ${incidentDetailUiState.incidentDetails.content}")
         Text("Date: ${convertMillisToDate(incidentDetailUiState.incidentDetails.timeStamp)}")
 
+        HorizontalDivider(thickness = 1.dp, modifier = Modifier.padding(vertical = 8.dp))
+
+        Text("Related Incidents", style = Typography.titleLarge)
         LazyColumn(modifier = Modifier.fillMaxWidth()) {
             items(
                 items = incidentDetailUiState.relatedIncidents.sortedBy { it.timeStamp }.reversed(),
                 key = { it.id }) { item ->
-                IncidentItem(
+                IncidentCard(
                     item = item,
+                    showDetails = true,
                     onIncidentClick = {  }
                 )
             }

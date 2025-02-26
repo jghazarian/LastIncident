@@ -1,7 +1,7 @@
 package com.jghazarian.lastincident.repository
 
 import com.jghazarian.lastincident.AppDatabase
-import com.jghazarian.lastincident.IncidentEntity
+import com.jghazarian.lastincident.database.IncidentEntity
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -14,7 +14,6 @@ class DataRepository : Repository, KoinComponent {
     private val scope: CoroutineScope = CoroutineScope(Dispatchers.Default)
 
     override suspend fun addIncident(incidentEntity: IncidentEntity) {
-//        //TODO: this is doing the fruitties add to cart, which does not work for what we want to do here
         database.getDao().insert(incidentEntity)
     }
 

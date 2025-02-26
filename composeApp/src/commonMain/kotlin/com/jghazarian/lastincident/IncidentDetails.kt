@@ -1,7 +1,9 @@
 package com.jghazarian.lastincident
 
 import co.touchlab.kermit.Logger
+import com.jghazarian.lastincident.database.IncidentEntity
 
+//This is the incident type used for single incidents that can be edited for saving
 data class IncidentDetails(
     val id: Long = 0,
     val title: String = "",

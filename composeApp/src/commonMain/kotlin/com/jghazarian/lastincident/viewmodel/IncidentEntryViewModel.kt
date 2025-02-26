@@ -5,9 +5,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.jghazarian.lastincident.repository.DataRepository
 import com.jghazarian.lastincident.IncidentDetails
-import com.jghazarian.lastincident.IncidentEntity
+import com.jghazarian.lastincident.database.IncidentEntity
 import com.jghazarian.lastincident.repository.Repository
 import com.jghazarian.lastincident.toIncidentDetails
 import com.jghazarian.lastincident.toIncidentEntity
@@ -67,28 +66,7 @@ data class EntryUiState(
     val incidentTitles: List<String> = listOf()
 )
 
-//data class IncidentDetails(
-//    val id: Long = 0,
-//    val title: String = "",
-//    val content: String = "",
-//    val timeStamp: String = "",
-//)
-
-//fun IncidentDetails.toIncidentEntity(): IncidentEntity = IncidentEntity(
-//    id = id,
-//    title = title,
-//    content = content,
-//    timeStamp = timeStamp.toLongOrNull() ?: 0   //TODO: this should probably default to a Time.Now()
-//)
-
 fun IncidentEntity.toEntryUiState(isEntryValid: Boolean = false): EntryUiState = EntryUiState(
     incidentDetails = this.toIncidentDetails(),
     isEntryValid = isEntryValid
 )
-
-//fun IncidentEntity.toIncidentDetails(): IncidentDetails = IncidentDetails(
-//    id = id,
-//    title = title,
-//    content = content,
-//    timeStamp = timeStamp.toString()
-//)
