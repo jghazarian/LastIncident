@@ -1,5 +1,6 @@
 package com.jghazarian.lastincident.screen
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.calculateEndPadding
@@ -8,10 +9,15 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.Button
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Switch
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
@@ -31,17 +37,15 @@ import com.jghazarian.lastincident.theme.IncidentTheme
 import com.jghazarian.lastincident.theme.Typography
 import com.jghazarian.lastincident.util.convertMillisToDate
 import com.jghazarian.lastincident.viewmodel.MainViewModel
-import com.jghazarian.lastincident.viewmodel.TimerViewModel
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.compose.viewmodel.koinViewModel
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
 fun MainScreen(
     navigateToIncidentDetail: (Long) -> Unit,
     navigateToIncidentEntry: () -> Unit,
     modifier: Modifier = Modifier,
-    timerViewModel: TimerViewModel = TimerViewModel()
 ) {
 //    val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(rememberTopAppBarState())
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(rememberTopAppBarState())
@@ -50,11 +54,10 @@ fun MainScreen(
 //    val topAppBarTitleStyle = if (isCollapsed.value) Typography.titleSmall else Typography.titleLarge
     val collapsed = 22
     val expanded = 34
-    val topAppBarTextSize = (collapsed + (expanded - collapsed)*(1-scrollBehavior.state.collapsedFraction)).sp
+    val topAppBarTextSize = (collapsed + (expanded - collapsed) * (1 - scrollBehavior.state.collapsedFraction)).sp
     val viewModel = koinViewModel<MainViewModel>()
     val uiState by viewModel.homeUiState.collectAsStateWithLifecycle()
 
-    val currentTime = timerViewModel.timer.collectAsStateWithLifecycle()
     val periodSinceLast = viewModel.periodSinceLast.collectAsStateWithLifecycle()
     Scaffold(
         modifier = modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
@@ -65,10 +68,17 @@ fun MainScreen(
                 modifier = modifier,
                 scrollBehavior = scrollBehavior,
                 navigateUp = {},
-                titleSize =topAppBarTextSize
+                titleSize = topAppBarTextSize
             )
         },
-        floatingActionButton = {}
+        floatingActionButton = {
+            FloatingActionButton(
+                onClick = navigateToIncidentEntry,
+                containerColor = MaterialTheme.colorScheme.secondaryContainer
+            ) {
+                Icon(Icons.Filled.Add, "Add Button")
+            }
+        }
     ) { innerPadding ->
         Column(
             modifier = Modifier
@@ -82,35 +92,15 @@ fun MainScreen(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Column(Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
-                Row {
-                    Button(
-                        onClick = navigateToIncidentEntry,
-                        modifier = modifier.padding(4.dp)
-                    ) {
-                        Text("create incident")
-                    }
-
-                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                        Text("Filter Unique Titles", style = Typography.labelMedium)
-                        Switch(
-                            checked = viewModel.filter,
-                            onCheckedChange = viewModel::toggleFilter
-                        )
-                    }
-
-                    Button(
-                        onClick = {
-                            viewModel.addItemToGroup(
-                                IncidentEntity(0, "test string", "more details", 123)
-                            )
-                        },
-                        modifier = modifier.padding(4.dp)
-                    ) {
-                        Text("Add Test Incident")
-                    }
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Text("Filter Unique Titles", style = Typography.labelMedium, modifier = Modifier.padding(4.dp))
+                    Switch(
+                        checked = viewModel.filter,
+                        onCheckedChange = viewModel::toggleFilter,
+                        modifier = Modifier.padding(4.dp)
+                    )
                 }
 
-                Text(currentTime.value)
                 if (uiState.incidents.isNotEmpty()) {
                     Text(
                         "Time of last incident: ${
@@ -129,13 +119,13 @@ fun MainScreen(
                 }
 
                 LazyColumn(modifier = Modifier.fillMaxWidth()) {
-//                            items(items = viewModel.incidentsByDate, key = { it.id }) { item ->
                     items(
                         items = uiState.incidents.sortedBy { it.timeStamp }.reversed(),
                         key = { it.id }) { item ->
                         IncidentCard(
                             item = item,
-                            onIncidentClick = { navigateToIncidentDetail(it) }
+                            onIncidentClick = { navigateToIncidentDetail(it) },
+                            modifier = Modifier.animateItemPlacement()
                         )
                     }
                 }
@@ -152,8 +142,7 @@ fun MainScreenPreview() {
         MainScreen(
             navigateToIncidentDetail = {},
             navigateToIncidentEntry = {},
-            modifier = Modifier,
-            timerViewModel = TimerViewModel()
+            modifier = Modifier
         )
     }
 }
