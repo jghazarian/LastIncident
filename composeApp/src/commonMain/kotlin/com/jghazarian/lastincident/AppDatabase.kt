@@ -52,6 +52,12 @@ interface IncidentDao {
 
     @Query("SELECT * FROM IncidentEntity WHERE title = :title")
     fun getIncidentsWithTitle(title: String): Flow<List<IncidentEntity>>
+
+    @Delete
+    suspend fun deleteIncident(item: IncidentEntity)
+
+    @Query("DELETE FROM IncidentEntity WHERE id = :id")
+    suspend fun deleteIncidentById(id: Long)
 }
 
 //fun getRoomDatabase(

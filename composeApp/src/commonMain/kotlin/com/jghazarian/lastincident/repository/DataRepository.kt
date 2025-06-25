@@ -46,6 +46,10 @@ class DataRepository : Repository, KoinComponent {
         return database.getDao().getIncidentFlow(id)
     }
 
+    override suspend fun deleteIncidentById(id: Long) {
+        database.getDao().deleteIncidentById(id)
+    }
+
     override suspend fun refreshData() {
         //TODO: this would do an endpoint call to update the feed
     }

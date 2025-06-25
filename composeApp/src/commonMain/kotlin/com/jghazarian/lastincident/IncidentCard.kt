@@ -19,8 +19,10 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.jghazarian.lastincident.database.IncidentEntity
+import com.jghazarian.lastincident.theme.LocalSpacing
 import com.jghazarian.lastincident.util.convertMillisToDate
 import com.jghazarian.lastincident.theme.Typography
+import com.jghazarian.lastincident.theme.spacing
 
 
 @Composable
@@ -37,7 +39,7 @@ fun IncidentCard(
         modifier = modifier
             .fillMaxWidth()
             .clickable { onIncidentClick(item.id) }
-            .padding(horizontal = 16.dp, vertical = 8.dp)
+            .padding(horizontal = LocalSpacing.current.medium, vertical = MaterialTheme.spacing.small)
             .clip(RoundedCornerShape(8.dp)),
         shape = RoundedCornerShape(8.dp),
     ) {

@@ -11,5 +11,6 @@ interface Repository {
     fun loadData(): Flow<List<IncidentEntity>>
     fun getIncidentsWithTitle(title: String): Flow<List<IncidentEntity>>
     fun getIncident(id: Long): Flow<IncidentEntity>
+    suspend fun deleteIncidentById(id: Long)
     suspend fun refreshData()
 }

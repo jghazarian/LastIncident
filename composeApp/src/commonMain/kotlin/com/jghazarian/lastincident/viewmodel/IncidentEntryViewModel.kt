@@ -15,14 +15,16 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
+import kotlinx.datetime.Clock
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
 class IncidentEntryViewModel : ViewModel(), KoinComponent {
     private val dataRepository: Repository by inject()
 
-
-    var entryUiState by mutableStateOf(EntryUiState())
+    //Default to current time for new incidents
+    var entryUiState by mutableStateOf(EntryUiState(IncidentDetails(timeStamp = Clock.System.now().toEpochMilliseconds())))
         private set
 
     val distinctTitles: StateFlow<List<String>> =
@@ -43,13 +45,17 @@ class IncidentEntryViewModel : ViewModel(), KoinComponent {
         }
 
     fun updateUiState(incidentDetails: IncidentDetails) {
-        entryUiState =
-            EntryUiState(incidentDetails = incidentDetails, isEntryValid = validateInput(incidentDetails))
+        entryUiState = EntryUiState(incidentDetails = incidentDetails, isEntryValid = validateInput(incidentDetails))
+        viewModelScope.launch {
+            filterTitles(incidentDetails.title)
+        }
     }
 
-    suspend fun saveIncident() {
+    fun saveIncident() {
         if (validateInput()) {
-            dataRepository.addIncident(entryUiState.incidentDetails.toIncidentEntity())
+            viewModelScope.launch {
+                dataRepository.addIncident(entryUiState.incidentDetails.toIncidentEntity())
+            }
         }
     }
 

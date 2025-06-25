@@ -114,7 +114,12 @@ fun MainScreen(
                         modifier = Modifier.padding(top = 8.dp)
                     )
                     Text(
-                        "${periodSinceLast.value.days} days, ${periodSinceLast.value.hours} hours, ${periodSinceLast.value.minutes} minutes, ${periodSinceLast.value.seconds} seconds,"
+                        (if (periodSinceLast.value.years > 0) "${periodSinceLast.value.years} years, " else "") +
+                                (if (periodSinceLast.value.months > 0) "${periodSinceLast.value.months} months, " else "") +
+                                (if (periodSinceLast.value.days > 0) "${periodSinceLast.value.days} days, " else "") +
+                                (if (periodSinceLast.value.hours > 0) "${periodSinceLast.value.hours} hours, " else "") +
+                                (if (periodSinceLast.value.minutes > 0) "${periodSinceLast.value.minutes} minutes, " else "") +
+                                "${periodSinceLast.value.seconds} seconds"
                     )
                 }
 

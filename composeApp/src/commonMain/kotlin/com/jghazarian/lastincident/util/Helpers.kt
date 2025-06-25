@@ -1,13 +1,16 @@
 package com.jghazarian.lastincident.util
 
 import kotlinx.datetime.Instant
+import kotlinx.datetime.LocalDateTime
+import kotlinx.datetime.TimeZone
 import kotlinx.datetime.format
-import kotlinx.datetime.format.DateTimeComponents
 import kotlinx.datetime.format.char
+import kotlinx.datetime.toLocalDateTime
 
-fun convertMillisToDate(millis: Long): String {
+fun convertMillisToDate(millis: Long, showSeconds: Boolean = false): String {
     val instant = Instant.fromEpochMilliseconds(millis)
-    val dateFormat = DateTimeComponents.Format {
+
+    val dateFormat = LocalDateTime.Format {
         year()
         char('-')
         monthNumber()
@@ -16,16 +19,16 @@ fun convertMillisToDate(millis: Long): String {
 
         char(' ')
 
-        hour()
+        amPmHour()
         char(':')
         minute()
-        char(':')
-        second()
+        if (showSeconds) {
+            char(':')
+            second()
+        }
+        char(' ')
+        amPmMarker("AM", "PM")
     }
 
-    return instant.format(dateFormat)   //TODO: this can be given an offset, but due to off by one errors with timezones, this is probably what we want
+    return instant.toLocalDateTime(TimeZone.currentSystemDefault()).format(dateFormat)
 }
-
-//fun convertMillisToHours(millis: Long): String {
-//
-//}
