@@ -49,6 +49,7 @@ import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.toSize
+import androidx.compose.ui.window.DialogProperties
 import androidx.compose.ui.window.PopupProperties
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import co.touchlab.kermit.Logger
@@ -56,7 +57,10 @@ import com.jghazarian.lastincident.viewmodel.EntryUiState
 import com.jghazarian.lastincident.IncidentDetails
 import com.jghazarian.lastincident.util.convertMillisToDate
 import com.jghazarian.lastincident.viewmodel.IncidentEntryViewModel
-import kotlinx.coroutines.launch
+import kotlinx.datetime.Instant
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toInstant
+import kotlinx.datetime.toLocalDateTime
 import org.koin.compose.viewmodel.koinViewModel
 
 
@@ -229,7 +233,6 @@ fun IncidentInputForm(
         onValueChange = {
             Logger.d("initial: ${convertMillisToDate(it ?: 0)} and just it: $it")
             onValueChange(incidentDetails.copy(timeStamp = it ?: 0))
-//            onValueChange(incidentDetails.copy(timeStamp = convertMillisToDate(it ?: 0)))
             Logger.d("timestamp update: ${incidentDetails.timeStamp}")
             openTimeDialog.value = true
                         },
@@ -242,7 +245,8 @@ fun IncidentInputForm(
         onValueChange = {
             Logger.d("initial before time: ${convertMillisToDate(it ?: 0)} and just it: $it")
             val timestamp = datePickerState.selectedDateMillis ?: 0
-            onValueChange(incidentDetails.copy(timeStamp = timestamp + it))
+            val timeWithZone = Instant.fromEpochMilliseconds(timestamp + it).toLocalDateTime(TimeZone.UTC).toInstant(TimeZone.currentSystemDefault()).toEpochMilliseconds()
+            onValueChange(incidentDetails.copy(timeStamp = timeWithZone))
             Logger.d("timestamp update with time: ${incidentDetails.timeStamp}")
         },
         onDismiss = { openTimeDialog.value = false }
@@ -289,8 +293,6 @@ fun IncidentDatePicker(
     }
 }
 
-//TODO: This dialog shows skewed on desktop, need to check on mobile. There's a "TimePickerDialog"
-// in the current alpha version of the material3 library. Maybe that will display properly
 @ExperimentalMaterial3Api
 @Composable
 fun IncidentTimePicker(
@@ -328,7 +330,8 @@ fun IncidentTimePicker(
                     state = timePickerState,
                     modifier = Modifier.verticalScroll(rememberScrollState())
                 )
-            }
+            },
+            properties = DialogProperties(usePlatformDefaultWidth = false)
         )
     }
 }
